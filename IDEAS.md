@@ -38,7 +38,7 @@ And when we arrive, Mom will be waiting for us at home with a pie
 
 ## config file (or config in builder)
 config with input definitions and lambda functions for logic and definitions enum
-
+***(this requires a powerful own language parser)***
 # realisation
 pipeline:
  * create stack
