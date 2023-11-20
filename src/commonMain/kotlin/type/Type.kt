@@ -1,12 +1,30 @@
 package type
 
-typealias Arguments = HashMap<String, Type>
+import kotlin.jvm.JvmInline
 
-sealed class Type
+typealias Arguments = HashMap<String, Type<*>>
 
-data class ProtexInt(val num: Int) : Type()
-data class ProtexString(val str: String) : Type()
+sealed class Type<T> {
+    open fun getInstance(value: T): T {
+        return value
+    }
+}
 
-data class Variants(val vars: List<Variant>) : Type() {
-    data class Variant(val name: String)
+data object ProtexInt : Type<Int>()
+
+data object ProtexString : Type<String>()
+
+data class Variants(val vars: List<Variant>) : Type<Variants.Variant>() {
+    @JvmInline
+    value class Variant(private val name: String)
+
+    fun getInstance(value: String) = getInstance(Variant(value))
+
+    override fun getInstance(value: Variant): Variant {
+        if (value in vars) {
+            return value
+        } else {
+            throw IllegalArgumentException("Variant with this name was not found")
+        }
+    }
 }
